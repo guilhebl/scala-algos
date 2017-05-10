@@ -9,7 +9,7 @@ object Main {
   
   def main(args: Array[String]): Unit = {            
     val a = mapping.keySet.toArray        
-    var c = Array.ofDim[Char](a.length)
+    var c = new Array[Char](a.length)
     printCombos(a, 0, c)
   }   
     
