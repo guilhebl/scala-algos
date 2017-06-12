@@ -1,0 +1,37 @@
+
+    import play.api.libs.json._
+    import play.api.libs.functional.syntax._
+
+    object WalmartSearchItem( {
+      implicit val documentFormatter: Format[WalmartSearchItem(] = (
+       (__ \ "itemId").format[Int] and
+(__ \ "parentItemId").format[Int] and
+(__ \ "name").format[String] and
+(__ \ "msrp").format[Double] and
+(__ \ "salePrice").format[Double] and
+(__ \ "upc").format[String] and
+(__ \ "categoryPath").format[String] and
+(__ \ "shortDescription").format[String] and
+(__ \ "longDescription").format[String] and
+(__ \ "thumbnailImage").format[String] and
+(__ \ "mediumImage").format[String] and
+(__ \ "largeImage").format[String] and
+(__ \ "productTrackingUrl").format[String] and
+(__ \ "standardShipRate").format[Double] and
+(__ \ "marketplace").format[Boolean] and
+(__ \ "modelNumber").format[String] and
+(__ \ "productUrl").format[String] and
+(__ \ "customerRating").format[String] and
+(__ \ "numReviews").format[Int] and
+(__ \ "customerRatingImage").format[String] and
+(__ \ "categoryNode").format[String] and
+(__ \ "bundle").format[Boolean] and
+(__ \ "stock").format[String] and
+(__ \ "addToCartUrl").format[String] and
+(__ \ "affiliateAddToCartUrl").format[String] and
+(__ \ "giftOptions").format[GiftOptions] and
+(__ \ "shippingPassEligible").format[Boolean] and
+(__ \ "availableOnline").format[Boolean] and
+(__ \ "imageEntities").format[List[ImageEntity]] 
+      )(WalmartSearchItem(.apply, unlift(WalmartSearchItem(.unapply))
+    }

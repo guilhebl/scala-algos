@@ -1,0 +1,33 @@
+package product.services.market.walmart.model
+
+case class WalmartSearchItem(
+  itemId: Int,
+  parentItemId: Int,
+  name: String,
+  msrp: Double,
+  salePrice: Double,
+  upc: String,
+  categoryPath: String,
+  shortDescription: String,
+  longDescription: String,
+  thumbnailImage: String,
+  mediumImage: String,
+  largeImage: String,
+  productTrackingUrl: String,
+  standardShipRate: Double,
+  marketplace: Boolean,
+  modelNumber: String,
+  productUrl: String,
+  customerRating: String,
+  numReviews: Int,
+  customerRatingImage: String,
+  categoryNode: String,
+  bundle: Boolean,
+  stock: String,
+  addToCartUrl: String,
+  affiliateAddToCartUrl: String,
+  giftOptions: GiftOptions,
+  shippingPassEligible: Boolean,
+  availableOnline: Boolean,
+  imageEntities: List[ImageEntity]
+)
