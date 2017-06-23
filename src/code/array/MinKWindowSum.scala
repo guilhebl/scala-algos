@@ -9,8 +9,8 @@ import scala.collection.mutable.ListBuffer
 object MinKWindowSum {
   def main(args: Array[String]): Unit = {   
     
-    val document = "MS(1) Awesome x y Is MS(5) x y MS(8) x Is Awesome x y z Awesome"    
-    println(getMinWindowSize(document, "MS is awesome"))
+    val document = "This Hello is a huge text with thousands of Hello words and other lines and World and many other Hello docs Words of World in many langs and features"    
+    println(getMinWindowSize(document, "Hello World"))
   }   
     
   def getMinWindowSize(doc:String, s:String): Int = {
@@ -30,7 +30,7 @@ object MinKWindowSum {
       if (!currWindow.isEmpty && currWindow.head._1.equals(tuple._1)) currWindow.remove(0)         
       currWindow += tuple
       if (keywords.subsetOf(currWindow.map(_._1).toSet)) {
-        val currMin = currWindow.last._2 - currWindow.head._2
+        val currMin = currWindow.last._2 - currWindow.head._2 + currWindow.last._1.length
         if (min > currMin) {
           min = currMin
           minI = currWindow.head._2
