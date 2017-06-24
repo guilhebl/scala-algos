@@ -22,8 +22,6 @@ object MinKWindowSum {
     .sortBy(_._2)
         
     var min = Int.MaxValue    
-    var minI = 0
-    var minJ = 0
     var currWindow = ListBuffer[(String,Int)]()
     
     for( tuple <- idxs ) {  
@@ -31,15 +29,11 @@ object MinKWindowSum {
       currWindow += tuple
       if (keywords.subsetOf(currWindow.map(_._1).toSet)) {
         val currMin = currWindow.last._2 - currWindow.head._2 + currWindow.last._1.length
-        if (min > currMin) {
-          min = currMin
-          minI = currWindow.head._2
-          minJ = currWindow.last._2          
-        }
+        if (min > currMin) min = currMin        
       }      
     }
         
-    println("min = " + min + " ,i = " + minI + " j = " + minJ )    
+    println("min = " + min + " ,i = " + currWindow.head._2 + " j = " + currWindow.last._2)    
     min
   }
  
