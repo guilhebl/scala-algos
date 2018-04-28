@@ -1,6 +1,5 @@
 package code.array
 
-import scala.collection.mutable.Buffer
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -9,32 +8,87 @@ import scala.collection.mutable.ListBuffer
 object MinKWindowSum {
   def main(args: Array[String]): Unit = {   
     
-    val document = "This Hello is a huge text with thousands of Hello words and other lines and World and many other Hello docs Words of World in many langs and features"    
-    println(getMinWindowSize(document, "Hello World"))
+    val document =
+      """This Hello World is a huge text with thousands
+Java of Hello words and Scala other lines and World and many other Hello docs
+Words of World in many langs Hello and features
+Java Scala AXVX TXZX ASDQWE OWEQ World asb eere qwerer
+asdasd Scala Java Hello docs World KLKM NWQEW ZXCASD OPOOIK Scala ASDSA
+"""
+    println(getMinWindowSize(document, "Hello World Scala"))
+    println(getMinWindowSize2(document, "Hello World Scala".split(" ").toSet))
   }   
     
-  def getMinWindowSize(doc:String, s:String): Int = {
-    
+  def getMinWindowSize(str:String, s:String): Int = {
+
+    /* creates a list of tuples List[(String, Int)] which contains each keyword and its
+    respective index found in the text sorted in order by index.
+    */
     val keywords = s.split(" ").toSet
-    val idxs = keywords.map(k => (k -> ("(?i)\\Q" + k + "\\E").r.findAllMatchIn(doc).map(_.start)))
-    .map{ case (keyword,itr) => itr.foldLeft(List[(String,Int)]())((result, num) => result :+ (keyword, num))}
-    .foldLeft(List[(String,Int)]())((res, list) => res ++ list)
-    .sortBy(_._2)
-        
-    var min = Int.MaxValue    
-    var currWindow = ListBuffer[(String,Int)]()
-    
-    for( tuple <- idxs ) {  
-      if (!currWindow.isEmpty && currWindow.head._1.equals(tuple._1)) currWindow.remove(0)         
-      currWindow += tuple
-      if (keywords.subsetOf(currWindow.map(_._1).toSet)) {
-        val currMin = currWindow.last._2 - currWindow.head._2 + currWindow.last._1.length
-        if (min > currMin) min = currMin        
-      }      
+    val idxs = keywords.map(k => (k -> ("(?i)\\Q" + k + "\\E").r.findAllMatchIn(str).map(_.start)))
+      .map{ case (keyword,itr) => itr.map((keyword, _))}
+      .flatMap(identity).toSeq
+      .sortBy(_._2)
+
+    // Calculates the min window on the next step.
+    var min = Int.MaxValue
+    var minI, minJ = -1
+
+    // current window indexes and words
+    var currIdxs = ListBuffer[Int]()
+    var currWords = ListBuffer[String]()
+
+    for(idx <- idxs ) {
+
+      // check if word exists in window already
+      val idxOfWord = currWords.indexOf(idx._1)
+
+      if (!currWords.isEmpty && idxOfWord != -1) {
+        currWords = currWords.drop(idxOfWord + 1)
+        currIdxs = currIdxs.drop(idxOfWord + 1)
+      }
+      currWords += idx._1
+      currIdxs += idx._2
+
+      // if all keys are present check if it is new min window
+      if (keywords.subsetOf(currWords.toSet)) {
+        val currMin = Math.abs(currIdxs.last - currIdxs.head)
+        if (min > currMin) {
+          min = currMin
+          minI = currIdxs.head
+          minJ = currIdxs.last
+        }
+      }
     }
-        
-    println("min = " + min + " ,i = " + currWindow.head._2 + " j = " + currWindow.last._2)    
+
+    println("min = " + min + " ,i = " + minI + " j = " + minJ)
     min
   }
- 
+
+  def getMinWindowSize2(document:String, WORDS:Set[String]): Int = {
+    var minDistance = document.trim
+      .split(" ")
+      .foldLeft(List[(String, Int)](), None: Option[Int], 0) {
+        case ((words, min, idx), word) if WORDS.contains(word) =>
+          val newWords = (word, idx) :: words.filter(_._1 != word)
+          if (newWords.map(_._1).toSet == WORDS) { // toSet on only 3 elmts
+            var idxes = newWords.map(_._2)
+            var dist = idxes.max - idxes.min
+            var newMin = min match {
+              case None => dist
+              case Some(min) if min < dist => min
+              case _ => dist
+            }
+            (newWords, Some(newMin), idx + word.length + 1)
+          }
+          else {
+            (newWords, min, idx + word.length + 1)
+          }
+        case ((words, min, idx), word) =>
+          (words, min, idx + word.length + 1)
+      }
+      ._2
+    println(minDistance.getOrElse(-1))
+    minDistance.getOrElse(-1)
+  }
 }
