@@ -51,7 +51,7 @@ asdasd Scala Java Hello docs World KLKM NWQEW ZXCASD OPOOIK Scala ASDSA
       currIdxs += idx._2
 
       // if all keys are present check if it is new min window
-      if (keywords.subsetOf(currWords.toSet)) {
+      if (keywords.size == currWords.length) {
         val currMin = Math.abs(currIdxs.last - currIdxs.head)
         if (min > currMin) {
           min = currMin
@@ -60,13 +60,11 @@ asdasd Scala Java Hello docs World KLKM NWQEW ZXCASD OPOOIK Scala ASDSA
         }
       }
     }
-
-    println("min = " + min + " ,i = " + minI + " j = " + minJ)
     min
   }
 
   def getMinWindowSize2(document:String, WORDS:Set[String]): Int = {
-    var minDistance = document.trim
+    val minDistance = document.trim
       .split(" ")
       .foldLeft(List[(String, Int)](), None: Option[Int], 0) {
         case ((words, min, idx), word) if WORDS.contains(word) =>
@@ -88,7 +86,6 @@ asdasd Scala Java Hello docs World KLKM NWQEW ZXCASD OPOOIK Scala ASDSA
           (words, min, idx + word.length + 1)
       }
       ._2
-    println(minDistance.getOrElse(-1))
     minDistance.getOrElse(-1)
   }
 }
