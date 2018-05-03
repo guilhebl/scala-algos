@@ -17,6 +17,7 @@ asdasd Scala Java Hello docs World KLKM NWQEW ZXCASD OPOOIK Scala ASDSA
 """
     println(getMinWindowSize(document, "Hello World Scala"))
     println(getMinWindowSize2(document, "Hello World Scala".split(" ").toSet))
+    println(getMinWindowSize3(document, "Hello World Scala"))
   }   
     
   def getMinWindowSize(str:String, s:String): Int = {
@@ -87,5 +88,22 @@ asdasd Scala Java Hello docs World KLKM NWQEW ZXCASD OPOOIK Scala ASDSA
       }
       ._2
     minDistance.getOrElse(-1)
+  }
+
+  def getMinWindowSize3(str :String, s :String) :Int = {
+    val keywords = s.split("\\s+").toSet
+    val re = "(?i)\\b(" + keywords.mkString("|") + ")\\b"
+    val idxs = re.r.findAllMatchIn(str).map(w => w.start -> w.toString).toList
+
+    def dist(input :List[(Int, String)], keys :Set[String]) :Option[Int] = input match {
+      case Nil => None
+      case (idx, word) :: t =>
+        if (keys(word) && keys.size == 1) Some(idx)
+        else dist(t, keys diff Set(word))
+    }
+
+    idxs.tails.collect{
+      case (idx, word)::rest => dist(rest, keywords diff Set(word)).map(_ - idx)
+    }.flatten.reduceOption(_ min _).getOrElse(-1)
   }
 }
