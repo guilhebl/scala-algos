@@ -22,7 +22,6 @@ object SumSubsequence {
           sum += subArray(k)
           print(subArray(k))
         }
-        println(" - sum = " + sum)
 
         if (sum >= interval._1 && sum <= interval._2) {
           count += 1
