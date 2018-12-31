@@ -3,7 +3,7 @@ package code.combinatorics
 /**
  * https://careercup.com/question?id=5154795351441408
  */
-object Main {  
+object PrintCombos {
   
   val mapping = Map(1 -> "ABC", 2 -> "DEF") 
   

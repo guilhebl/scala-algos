@@ -27,7 +27,7 @@ object ReverseArraySpecialChars {
       }
     }
     
-    return a
+    a
   }
 
   
