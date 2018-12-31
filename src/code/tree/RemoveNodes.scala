@@ -8,10 +8,8 @@ case class TreeNode(nodes: Seq[TreeNode] = Seq.empty, data: Int = 0)
   * @return
   */
 object RemoveNodes {
-
   def main(args: Array[String]): Unit = {
     // Let us create the tree
-
     val root = TreeNode(
       nodes = Seq(
         TreeNode(nodes = Seq(
@@ -20,7 +18,14 @@ object RemoveNodes {
 
         TreeNode(nodes = Seq(
           TreeNode(data = 18), TreeNode(), TreeNode(data = 11), TreeNode()),
-          data = 6)
+          data = 6),
+
+        TreeNode(nodes = Seq(
+          TreeNode(data = 4), TreeNode(), TreeNode(data = 3), TreeNode())),
+
+        TreeNode(nodes = Seq(
+          TreeNode(), TreeNode(), TreeNode(data = 5), TreeNode(nodes = Seq(
+            TreeNode(data = 7), TreeNode(), TreeNode(data = 9), TreeNode()))))
       ),
       data = 12
     )
@@ -30,28 +35,42 @@ object RemoveNodes {
     printTree(head)
   }
 
-  private def printTree(node: Option[TreeNode]): Unit = {
+  def printTree(node: Option[TreeNode]): Unit = {
     node match {
       case Some(x) => printTree(x)
-      case _ => println("Empty")
+      case _ => println("Empty tree")
     }
   }
 
-  private def printTree(node: TreeNode): Unit = {
+  def printTree(node: TreeNode): Unit = {
     println(node.data)
     node.nodes.foreach(printTree)
   }
 
+  def getValidChildren(node: TreeNode) = {
+    node.nodes.map(removeZeros).filter(_.isDefined).map(_.get)
+  }
 
   def removeZeros(node: TreeNode): Option[TreeNode] = {
-    if (node.data ==  0) None
-    else {
-        Some(
-          TreeNode(
-            data = node.data,
-            nodes = node.nodes.map(removeZeros).filter(_.isDefined).map(_.get)
-          )
+    if (node.data == 0 && node.nodes.isEmpty) {
+      None
+    }
+    else if (node.data == 0 && node.nodes.nonEmpty) {
+      val validChildren = getValidChildren(node)
+      Some(
+        TreeNode(
+          data = validChildren.head.data,
+          nodes = validChildren.drop(1)
         )
+      )
+    }
+    else {
+      Some(
+        TreeNode(
+          data = node.data,
+          nodes = getValidChildren(node)
+        )
+      )
     }
   }
 
